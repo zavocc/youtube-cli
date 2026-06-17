@@ -52,7 +52,7 @@ func main() {
 	// get the leftover positional arguments as a prompt after parsing command line named arguments
 	args := flag.Args()
 	if len(args) == 0 {
-		fmt.Println("--id and prompt as las")
+		fmt.Println("A prompt is required along with --id")
 		showHelp()
 		os.Exit(1)
 	}
