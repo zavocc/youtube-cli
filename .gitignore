@@ -1,0 +1,14 @@
+
+.idea/
+bin/
+outputs/
+vendor/
+*.env
+*.exe
+*.iml
+*.test
+*.out
+.env
+.DS_Store
+Thumbs.db
+desktop.ini
