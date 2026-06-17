@@ -1,15 +1,13 @@
-package main
+package gemini
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"os"
 
 	"google.golang.org/genai"
 )
 
-func inference(prompt string, id string) string {
+func GApiClient(prompt string, id string) string {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, nil)
 	if err != nil {
@@ -29,20 +27,19 @@ func inference(prompt string, id string) string {
 	}
 
 	result, err := client.Models.GenerateContent(
-		ctx,
-		"gemini-3-flash-preview",
+		ctx, defaultModel,
 		contents,
 		&genai.GenerateContentConfig{
 			SystemInstruction: genai.NewContentFromText(systemPrompt, genai.RoleUser),
 			ThinkingConfig: &genai.ThinkingConfig{
-				ThinkingLevel: genai.ThinkingLevelMinimal,
+				ThinkingLevel:   genai.ThinkingLevelLow,
+				IncludeThoughts: false,
 			},
 		},
 	)
 
 	if err != nil {
-		fmt.Println("An error has occurred while performing inference, error log:\n", err.Error())
-		os.Exit(1)
+		log.Fatalln("An error has occurred while performing inference, error log:\n", err.Error())
 	}
 
 	return result.Text()

@@ -11,22 +11,24 @@ Written in golang, allowing for cross-platform support.
 - For agents - Coding and general purpose agents with `bash` tool can use this to understand and ask questions about the YouTube video content without scraping transcripts.  A minimal `SKILL.md` copy is provided for agents.
 
 ## Use-cases
-- Accurate and multilingual subtitle generation including the visual  actions of the video content
+- Accurate and multilingual subtitle generation including the visual actions of the video content
 - Content extraction such as code or text from the video
 - Moderation and safety classification, allowing to provide preambles of YouTube videos before the user can watch it  
-- Summarization
+- Summarization of the video
+- Searching for timestamp of a particular subject, text, or excerpts.
 
 ## Implementation Status
 It is currently minimalistic program that takes prompt and video ID as input, and text output grounded from YouTube videos.
 
 - [X] Basic functionality
 - [ ] Full Linux support and `Makefile` builds
-- [ ] Full scripting support such as pipelines (piping commands as prompt), file descriptors like stderr for errors.
+- [ ] Full scripting support such as pipelines (piping commands as prompt), file descriptors like stderr for errors
 - [ ] Gemini model picker that supports video input
 - [ ] Gemini Enterprise Agent Platform (aka Vertex AI) endpoint support and ADC auth
 - [ ] Flex and Priority inference for budget tuning
 - [ ] Nano Banana 2 based frame extraction
 - [ ] Optional Gemma 4-based guardrails for both input and output
+- [ ] Resolution parameter
 
 # How to use
 Download the binary through the [releases](/releases) page. \
@@ -57,12 +59,13 @@ go build -o .\outputs\youtube-watcher-cli.exe
 
 # FAQ
 ### What is the default model used?
-Gemini 3 Flash Preview Minimal
+Gemini 3.1 Flash Lite with low reasoning.
 
-### Are other non Gemini models will be supported in the future?
-No, there are no plans for it. The goal is to bring this YouTube video  understanding Gemini API capability to CLI and other tools as an executable.
+### Are other non Gemini models will be supported in the future for analyzing YouTube video as a subagent?
+No, there are no plans for it. Video understanding capabilities with YouTube videos is only exclusive with Gemini models. However, this utility is designed for other agent harnesses with non-Google models to ask questions about the video.
 
-YouTube as a context is exclusive to Gemini models.
+It is possible for other multimodal models, but it involves more time-consuming process such as downloading the video through yt-dlp, sample frames using FFmpeg and get audio content using speech models, and reason over it. \
+But it's not worth a complexity for now, speed and nuances can be compromised, but can be considered.
 
 ### Is it free to use?
 Yes, as long you get [Gemini API key](https://aistudio.google.com/api-keys) and set `GEMINI_API_KEY` environment variable
@@ -75,8 +78,8 @@ You can also use paid API keys if you wish and benefit from higher rate limits.
 While you can use the [Gemini API](https://ai.google.dev/gemini-api/docs/video-understanding#youtube) directly integrate and to pass YouTube URLs when calling Gemini API to your app
 
 This CLI program is designed to bring YouTube video understanding capabilities as an executable subagent so existing agents like Codex and non-Gemini models can use this to understand the contents of the video without writing additional code which includes:
-- Using scrapers or tools like yt-dlp to get the subtitles
-- Writing Gemini API code on the fly to understand content which can take time depending on how the model knows how to call Gemini API
+- Using scrapers or tools like yt-dlp to get the subtitles or calling Gemini API on the fly
+- Needing to manually integrate Gemini API as a dependency to the agentic harness
 - Having to maintain Gemini API as a dependency to your code in order to support this capability
 
 ### Does it rely on subtitles to understand video content?

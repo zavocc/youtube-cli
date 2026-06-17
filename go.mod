@@ -1,4 +1,4 @@
-module GeminiYouTubeWatcherTool
+module github.com/zavocc/youtube-watcher-cli
 
 go 1.26
 

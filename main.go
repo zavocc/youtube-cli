@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/zavocc/youtube-watcher-cli/internal/gemini"
 )
 
 var (
@@ -64,7 +66,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	textualResponse := inference(prompt, *videoID)
+	textualResponse := gemini.GApiClient(prompt, *videoID)
 	fmt.Println(textualResponse)
-	return
+	os.Exit(0)
 }
