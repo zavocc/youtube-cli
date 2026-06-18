@@ -59,7 +59,7 @@ func main() {
 	_, exists := os.LookupEnv("GEMINI_API_KEY")
 
 	if !exists {
-		fmt.Println("Gemini API key environment variable not set. Please set it using GEMINI_API_KEY variable.")
+		fmt.Println("Gemini API key environment variable not set. Please set it using GEMINI_API_KEY variable in `~/.youtube.env` or directly in the terminal.")
 		os.Exit(1)
 	}
 
