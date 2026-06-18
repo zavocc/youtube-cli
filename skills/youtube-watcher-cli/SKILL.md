@@ -47,6 +47,13 @@ youtube-watcher-cli --id dQw4w9WgXcQ classify whether this video is safe to show
 
 Quote the prompt if the shell or command runner requires it, but keep it as the final positional argument.
 
+## Model capabilities
+### What it can do:
+See visual frames and hear audio of the video, text prompt, and small system instruction always appended to define it's role. It can also understand timestamps of the video associated with the frame but it can be inaccurate (use with caution, must be treated as approximate indicators and not exact).
+
+### What it can't do
+It cannot see YouTube video ID, title, or other metadata. Use `yt-dlp` or YouTube Data API to get that information separately if needed.
+
 ## Failure Handling
 
 - If `GEMINI_API_KEY` is missing, ask the user to set `GEMINI_API_KEY` in `~/.youtube.env` or directly in the terminal before retrying. The binary will search for this file and read it without the need of sourcing, otherwise it will fall back based on existing environment variables set without it.
