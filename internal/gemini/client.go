@@ -21,8 +21,8 @@ func GApiClient(prompt string, id string, model string) string {
 
 	contents := []*genai.Content{
 		genai.NewContentFromParts([]*genai.Part{
-			genai.NewPartFromText(prompt),
 			genai.NewPartFromURI("https://www.youtube.com/watch?v="+id, "video/mp4"),
+			genai.NewPartFromText(prompt),
 		}, genai.RoleUser),
 	}
 
