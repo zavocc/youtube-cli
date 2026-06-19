@@ -36,8 +36,8 @@ Do not place named options after the prompt. Anything after the prompt is treate
 ## Supported models
 
 - `gemini-2.5-flash` - Best balance for speed, cost, and intelligence. It is the default with `1024` thinking budgets.
-- `gemini-3-flash-preview` - Inherits it's larger Pro-grade intelligence at fraction of the cost, with improved vision capabilities, but it is priced higher than 2.5 Flash. To ensure it meets cost and latency, this model has minimal near-zero reasoning effort set. Best at vision, world factual knowledge, and multilingual understanding.
-- `gemini-3.1-flash-lite` - Google's latest Flash-lite line of model, outperforms 2.5 Flash model, and is cheaper than both 2.5 Flash and 3 Flash Preview. Useful for quick video overviews and long videos for time and budget constrained scenarios.
+- `gemini-3-flash-preview` - Inherits it's larger Pro-grade intelligence at fraction of the cost with improved vision understanding, but it is priced higher than 2.5 Flash. To ensure it meets cost and latency, this model has minimal near-zero reasoning effort set. Best at vision, world factual knowledge, and multilingual understanding.
+- `gemini-3.1-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than both 2.5 Flash and 3 Flash Preview. Useful for quick video overviews and long videos for time and budget constrained scenarios.
 
 ## Workflow
 
