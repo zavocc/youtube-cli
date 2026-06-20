@@ -30,7 +30,7 @@ It is currently minimalistic program that takes prompt and video ID as input, an
 - [ ] Optional Gemma 4-based guardrails for both input and output
 - [ ] Video controls such as resolution and start/end offset parameter
 
-# How to use
+# Usage and installation
 Download the binary through the [releases](/releases) page. \
 As of 6/17/2026, I only provided binaries for Microsoft Windows (AMD64) platform. Linux coming soon.
 
@@ -44,7 +44,7 @@ Use:
 ```
 Note that the prompt must be at the end of the argument, either quoted or unquoted.
 
-## Installing for agents
+## Installing the agent skill
 The `youtube-watcher-cli` agent skill allows the agents of your choice effectively use this tool and understand YouTube videos. To install, use the `npx skills` command:
 
 ```shell
