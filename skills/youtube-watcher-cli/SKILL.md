@@ -12,15 +12,15 @@ Use the `youtube-watcher-cli` binary when a task needs grounded understanding of
 - Treat this as a standalone binary tool, not a library.
 - Expect `youtube-watcher-cli` or `youtube-watcher-cli.exe` to be available on `PATH`, unless the user provides an explicit executable path.
 - Require `GEMINI_API_KEY` in the environment before invoking the binary.
-- Use the YouTube video ID, not the full URL, with `--id`.
+- Use the video parameter with `--video`.
 
 ## Arguments
 
 ```bash
-youtube-watcher-cli --id [YOUTUBE_VIDEO_ID] --model [MODEL_ID] [prompt]
+youtube-watcher-cli --video [YOUTUBE_VIDEO_ID_OR_URL] --model [MODEL_ID] [prompt]
 ```
 
-- `--id [YOUTUBE_VIDEO_ID]`: Required. Pass only the video ID, such as `dQw4w9WgXcQ` from `https://www.youtube.com/watch?v=dQw4w9WgXcQ`.
+- `--video [YOUTUBE_VIDEO_ID_OR_URL]`: Required. Pass only the video ID or URL, such as `dQw4w9WgXcQ` or `https://www.youtube.com/watch?v=dQw4w9WgXcQ`.
 - `--model [MODEL_ID]`: Optional. Specify a model to use to process the video, defaults to `gemini-2.5-flash` if not specified. See the supported models section below for choosing model.
 - `--media-resolution [RESOLUTION]`: Optional. Specify the media resolution for the video, such as `low` or `high`. Defaults to `low` if not provided. Use `low` to prioritize speed and cost over extreme fine-detail, and `high` for better visual fidelity and fine details over cost of speed and budget.
 
@@ -42,9 +42,9 @@ Do not place named options after the prompt. Anything after the prompt is treate
 
 ## Workflow
 
-1. Extract the video ID from the user's URL when needed.
+1. Obtain the YouTube video URL or ID from the user input.
 2. Confirm if non-empty `~/.youtube.env` file or `GEMINI_API_KEY` is available in the command environment.
-3. Run the binary with `--id` before the prompt.
+3. Run the binary with `--video` before the prompt.
 4. Read the answer from stdout and report the relevant result to the user.
 
 ## Prompting
@@ -52,10 +52,10 @@ Do not place named options after the prompt. Anything after the prompt is treate
 Write direct prompts for the video task. Good prompt shapes include:
 
 ```bash
-youtube-watcher-cli --id dQw4w9WgXcQ summarize the video with key timestamps
-youtube-watcher-cli --id dQw4w9WgXcQ extract any visible code or terminal commands
-youtube-watcher-cli --id dQw4w9WgXcQ describe visual actions and spoken content in detail
-youtube-watcher-cli --id dQw4w9WgXcQ classify whether this video is safe to show before playback
+youtube-watcher-cli --video dQw4w9WgXcQ summarize the video with key timestamps
+youtube-watcher-cli --video dQw4w9WgXcQ extract any visible code or terminal commands
+youtube-watcher-cli --video dQw4w9WgXcQ describe visual actions and spoken content in detail
+youtube-watcher-cli --video dQw4w9WgXcQ classify whether this video is safe to show before playback
 ```
 
 Quote the prompt if the shell or command runner requires it, but keep it as the final positional argument.

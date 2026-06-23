@@ -28,11 +28,12 @@ It is currently minimalistic program that takes prompt and video ID as input, an
 - [ ] Flex and Priority inference for budget tuning
 - [ ] Nano Banana 2 based frame extraction
 - [ ] Optional Gemma 4-based guardrails for both input and output
-- [ ] Video controls such as resolution and start/end offset parameter
+- [x] Video processing controls such as media resolution and start/end offset parameter*
+
+*As of 06/23/26, only media resolution parameter is implemented.
 
 # Usage and installation
-Download the binary through the [releases](/releases) page. \
-As of 6/17/2026, I only provided binaries for Microsoft Windows (AMD64) platform. Linux coming soon.
+Download the binary through the [releases](https://github.com/zavocc/youtube-watcher-cli/releases) page.
 
 After the binary is placed onto the `PATH` environment variable, you must then set `GEMINI_API_KEY` environment variable or this program will not work.
 
@@ -40,7 +41,7 @@ You can either set `GEMINI_API_KEY` in `~/.youtube.env` or directly setting into
 
 Use: 
 ```
-.\youtube-watcher-cli  --id [YOUTUBE_VIDEO_ID] Write your prompt here
+.\youtube-watcher-cli  --video [YOUTUBE_VIDEO_ID_OR_URL] Write your prompt here
 ```
 Note that the prompt must be at the end of the argument, either quoted or unquoted.
 
@@ -51,14 +52,14 @@ The `youtube-watcher-cli` agent skill allows the agents of your choice effective
 npx skills add zavocc/youtube-watcher-cli --global     
 ```
 
+You will be asked where to install the skill based on the agent tools you use.
+
 ## Parameters
-- `--id [YOUTUBE_VIDEO_ID]` - it specifically requires the Video ID itself.
-    To get YouTube video ID, take https://www.youtube.com/watch?v=dQw4w9WgXcQ for example. The YouTube video ID of this video is `dQw4w9WgXcQ` after `?v=`
-- `--model [MODEL_ID]` - An optional parameter of model ID to set to analyze videos, please see [models list](./internal/gemini/models.go) for list of supported model and defaults.
+- `--video [YOUTUBE_VIDEO_ID_OR_URL]` - Either the public YouTube video URL or ID of the video itself.
+- `--model [MODEL_ID]` - An optional parameter of model ID to set to analyze videos, please see [models list](./internal/config/models.go) for list of supported model and defaults.
+- `--media-resolution ["low"|"high"]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters.
 
 `prompt` is placed at the end after named arguments, any arguments placed after `prompt` will be treated as part of the prompt as is. So passing `--model gemini-3-flash-preview` after `prompt` would be treated as prompt.
-
-You will be asked where to install the skill based on the agent tools you use.
 
 # Building
 You will need the latest version of Golang. I used Go version 1.26.4, `go` is set to PATH and `GOROOT` set to your environment variables pointing to Golang SDK directory. 
