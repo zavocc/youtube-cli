@@ -74,7 +74,7 @@ Subcommands include three mode of operations:
 
     Usage:
     ```shell
-    youtube-video-cli video VIDEO_ID
+    youtube-search-cli video VIDEO_ID
     ```
 
     This subcommand only takes one YouTube video ID, with no additional optional flags.  
