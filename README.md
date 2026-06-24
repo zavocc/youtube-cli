@@ -1,7 +1,7 @@
-# YouTube Watcher CLI
+# YouTube CLI
 A simple and easy to use CLI program that allows Gemini to "watch" YouTube videos and to get nuanced information about the YouTube video using Gemini API with custom instructions.
 
-Designed for people, machines, and agents - simple and portable.
+Designed for people, machines, and agents.
 
 Written in golang, allowing for cross-platform support.
 
@@ -57,7 +57,7 @@ You will be asked where to install the skill based on the agent tools you use.
 ## Parameters
 - `--video [YOUTUBE_VIDEO_ID_OR_URL]` - Either the public YouTube video URL or ID of the video itself.
 - `--model [MODEL_ID]` - An optional parameter of model ID to set to analyze videos, please see [models list](./internal/config/models.go) for list of supported model and defaults.
-- `--media-resolution ["low"|"high"]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters.
+- `--media-resolution [low|high]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters.
 
 `prompt` is placed at the end after named arguments, any arguments placed after `prompt` will be treated as part of the prompt as is. So passing `--model gemini-3-flash-preview` after `prompt` would be treated as prompt.
 
