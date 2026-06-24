@@ -34,7 +34,7 @@ To obtain an API key, you must enable [YouTube Data API](https://console.cloud.g
 
 ## Using the CLI program
 ```
-youtube-search-cli <SUBCOMMAND [OPTIONAL_FLAGS]> [QUERY_OR_ID]
+youtube-search-cli <SUBCOMMAND> [OPTIONS] [QUERY_OR_ID]
 ```
 
 Subcommands include three mode of operations:
@@ -42,24 +42,27 @@ Subcommands include three mode of operations:
 
     Usage:
     ```shell
-    youtube-video-cli search --max-results <N> --filter <video|playlist|mixed> --next-page-token <TOKEN> "query"
+   youtube-search-cli search [--filter video|playlist|mixed] [--max-results N] [--next-page-token TOKEN] "QUERY"
     ```
 
     Examples include: 
-    - `youtube-search-cli search "Never Gonna Give You Up"`
-    - `youtube-search-cli --max-results 25 "Travel vlogs"`
+    ```shell
+    youtube-search-cli search "Never Gonna Give You Up"
+    youtube-search-cli search --filter video --max-results 25 "TypeScript tutorials"
+    youtube-search-cli search --max-results 50 --next-page-token TOKEN "travel vlogs"
+    ```
 
     To see optional flags for `search` subcommand such as filtering or setting number of results per page, try `youtube-search-cli search --help`
 
     Common useful flags for this subcommand include:  
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
-    -  `--filter ["video"|"playlist"|"mixed"]` -  filters results, either `video`, `playlist`, or `mixed` (both videos and playlist). By default, if this flag is not set then `mixed` results are shown.
+    -  `--filter [video|playlist|mixed]` -  filters results, either `video`, `playlist`, or `mixed` (both videos and playlist). By default, if this flag is not set then `mixed` results are shown.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
 - `playlist` - Lists videos from a given playlist ID.
 
     Usage:
     ```shell
-    youtube-video-cli playlist --max-results <N> --next-page-token <TOKEN> "playlist_id" # not URL
+    youtube-search-cli playlist [--max-results N] [--next-page-token TOKEN] PLAYLIST_ID
     ```
 
     To see optional flags for `playlist`, try `youtube-search-cli playlist --help`
@@ -71,7 +74,7 @@ Subcommands include three mode of operations:
 
     Usage:
     ```shell
-    youtube-video-cli video "video_id" # not URL
+    youtube-video-cli video VIDEO_ID
     ```
 
     This subcommand only takes one YouTube video ID, with no additional optional flags.  

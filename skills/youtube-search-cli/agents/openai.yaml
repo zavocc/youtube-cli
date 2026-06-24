@@ -1,0 +1,4 @@
+interface:
+  display_name: "YouTube Search CLI"
+  short_description: "Search YouTube through the local API CLI"
+  default_prompt: "Use $youtube-search-cli to search YouTube efficiently and return relevant results."
