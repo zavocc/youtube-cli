@@ -16,6 +16,14 @@ if ($env:GOOS -eq "windows") {
 
 New-Item -Path "outputs" -ItemType Directory -Force
 
+$LDFLAGS = "-X github.com/zavocc/youtube-watcher-cli/internal/shared.Version=$Version"
+
 go build `
-  -ldflags "-X main.version=$Version" `
-  -o .\outputs\youtube-watcher-cli-$env:GOOS-$env:GOARCH-$Version$EXE
+  -ldflags $LDFLAGS `
+  -o .\outputs\youtube-watcher-cli-$env:GOOS-$env:GOARCH-$Version$EXE `
+  .\cli\youtube-watcher-cli\main.go
+
+go build `
+  -ldflags $LDFLAGS `
+  -o .\outputs\youtube-search-$env:GOOS-$env:GOARCH-$Version$EXE `
+  .\cli\youtube-search\main.go
