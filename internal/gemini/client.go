@@ -32,14 +32,15 @@ func GApiClient(prompt string, url string, model string, resolution string) stri
 	// Validate model and get corresponding config
 	modelSelectedConfig := config.ValidateModels(model)
 
-	videoPart := genai.NewPartFromURI(actualUrl, "video/mp4")
-	videoPart.MediaResolution = &genai.PartMediaResolution{
-		Level: config.ParseMediaResolution(resolution),
-	}
+	// per part resolution
+	// videoPart := genai.NewPartFromURI(actualUrl, "video/mp4")
+	// videoPart.MediaResolution = &genai.PartMediaResolution{
+	//	Level: config.ParseMediaResolution(resolution),
+	// }
 
 	contents := []*genai.Content{
 		genai.NewContentFromParts([]*genai.Part{
-			videoPart,
+			genai.NewPartFromURI(actualUrl, "video/mp4"),
 			genai.NewPartFromText(prompt),
 		}, genai.RoleUser),
 	}
@@ -50,6 +51,7 @@ func GApiClient(prompt string, url string, model string, resolution string) stri
 		&genai.GenerateContentConfig{
 			SystemInstruction: genai.NewContentFromText(systemPrompt, genai.RoleUser),
 			ThinkingConfig:    modelSelectedConfig.ThinkingConfig,
+			MediaResolution: genai.MediaResolution(config.ParseMediaResolution(resolution)),
 		},
 	)
 

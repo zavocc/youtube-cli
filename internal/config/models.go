@@ -8,8 +8,8 @@ import (
 )
 
 type configTemplate struct {
-	ModelID        string
-	ThinkingConfig *genai.ThinkingConfig
+	ModelID         string
+	ThinkingConfig  *genai.ThinkingConfig
 }
 
 // Thinking budgets
