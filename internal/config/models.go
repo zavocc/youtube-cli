@@ -2,20 +2,19 @@ package config
 
 import (
 	"fmt"
-	"os"
 
 	"google.golang.org/genai"
 )
 
 type configTemplate struct {
-	ModelID         string
-	ThinkingConfig  *genai.ThinkingConfig
+	ModelID        string
+	ThinkingConfig *genai.ThinkingConfig
 }
 
 // Thinking budgets
 var thinkingBudget = int32(1000)
 
-func ValidateModels(model string) configTemplate {
+func ValidateModels(model string) (configTemplate, error) {
 	switch model {
 	case "gemini-2.5-flash":
 		return configTemplate{
@@ -24,7 +23,7 @@ func ValidateModels(model string) configTemplate {
 				ThinkingBudget:  &thinkingBudget,
 				IncludeThoughts: false,
 			},
-		}
+		}, nil
 	case "gemini-3-flash-preview":
 		return configTemplate{
 			ModelID: "gemini-3-flash-preview",
@@ -32,7 +31,7 @@ func ValidateModels(model string) configTemplate {
 				ThinkingLevel:   genai.ThinkingLevelMinimal,
 				IncludeThoughts: false,
 			},
-		}
+		}, nil
 	case "gemini-3.1-flash-lite":
 		return configTemplate{
 			ModelID: "gemini-3.1-flash-lite",
@@ -40,11 +39,8 @@ func ValidateModels(model string) configTemplate {
 				ThinkingLevel:   genai.ThinkingLevelLow,
 				IncludeThoughts: false,
 			},
-		}
+		}, nil
 	default:
-		fmt.Fprintln(os.Stderr, "Invalid model specified. Use --help parameter to see supported models.")
-		os.Exit(1)
+		return configTemplate{}, fmt.Errorf("invalid model %q", model)
 	}
-
-	return configTemplate{}
 }

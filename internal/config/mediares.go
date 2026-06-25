@@ -2,23 +2,17 @@ package config
 
 import (
 	"fmt"
-	"os"
 
 	"google.golang.org/genai"
 )
 
-func ParseMediaResolution(resolution string) genai.PartMediaResolutionLevel {
-	var mediaResLevel genai.PartMediaResolutionLevel
-
+func ParseMediaResolution(resolution string) (genai.PartMediaResolutionLevel, error) {
 	switch resolution {
 	case "low":
-		mediaResLevel = genai.PartMediaResolutionLevelMediaResolutionLow
+		return genai.PartMediaResolutionLevelMediaResolutionLow, nil
 	case "high":
-		mediaResLevel = genai.PartMediaResolutionLevelMediaResolutionHigh
+		return genai.PartMediaResolutionLevelMediaResolutionHigh, nil
 	default:
-		fmt.Fprintln(os.Stderr, "Invalid media resolution specified. Use --help parameter to see supported media resolutions.")
-		os.Exit(1)
-		mediaResLevel = genai.PartMediaResolutionLevelMediaResolutionUnspecified
+		return genai.PartMediaResolutionLevelMediaResolutionUnspecified, fmt.Errorf("invalid media resolution %q: expected low or high", resolution)
 	}
-	return mediaResLevel
 }

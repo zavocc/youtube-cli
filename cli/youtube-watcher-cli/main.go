@@ -78,6 +78,12 @@ func main() {
 	}
 
 	//  dereference videoID so it can be passed as a string normally
-	fmt.Println(gemini.GApiClient(prompt, *videoID, *selectedModel, *mediaRes))
+	result, err := gemini.GApiClient(prompt, *videoID, *selectedModel, *mediaRes)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "An error has occurred - ", err)
+		os.Exit(1)
+	}
+
+	fmt.Println(result)
 	os.Exit(0)
 }

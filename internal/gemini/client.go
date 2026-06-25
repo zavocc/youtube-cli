@@ -3,19 +3,17 @@ package gemini
 import (
 	"context"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/config"
 	"google.golang.org/genai"
 )
 
-func GApiClient(prompt string, url string, model string, resolution string) string {
+func GApiClient(prompt string, url string, model string, resolution string) (string, error) {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, nil)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "An error has occurred while initializing the Gemini API client, error log:\n", err.Error())
-		os.Exit(1)
+		return "", fmt.Errorf("initialize the Gemini API client: %w", err)
 	}
 
 	// Check if it's either 11-character YouTube video ID or a full URL
@@ -25,12 +23,19 @@ func GApiClient(prompt string, url string, model string, resolution string) stri
 	} else if len(url) > 11 && (url[:7] == "http://" || url[:8] == "https://") {
 		actualUrl = strings.Split(url, "&")[0] // Remove any additional query parameters after the video ID
 	} else {
-		fmt.Fprintln(os.Stderr, "Invalid YouTube video ID or URL specified. Please provide a valid 11-character video ID or a full URL.")
-		os.Exit(1)
+		return "", fmt.Errorf("invalid YouTube video ID or URL specified")
 	}
 
 	// Validate model and get corresponding config
-	modelSelectedConfig := config.ValidateModels(model)
+	modelSelectedConfig, err := config.ValidateModels(model)
+	if err != nil {
+		return "", err
+	}
+
+	mediaResLevel, err := config.ParseMediaResolution(resolution)
+	if err != nil {
+		return "", err
+	}
 
 	// per part resolution
 	// videoPart := genai.NewPartFromURI(actualUrl, "video/mp4")
@@ -51,14 +56,13 @@ func GApiClient(prompt string, url string, model string, resolution string) stri
 		&genai.GenerateContentConfig{
 			SystemInstruction: genai.NewContentFromText(systemPrompt, genai.RoleUser),
 			ThinkingConfig:    modelSelectedConfig.ThinkingConfig,
-			MediaResolution: genai.MediaResolution(config.ParseMediaResolution(resolution)),
+			MediaResolution:   genai.MediaResolution(mediaResLevel),
 		},
 	)
 
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "An error has occurred while performing inference, error log:\n", err.Error())
-		os.Exit(1)
+		return "", fmt.Errorf("perform inference: %w", err)
 	}
 
-	return result.Text()
+	return result.Text(), nil
 }
