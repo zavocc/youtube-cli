@@ -79,6 +79,12 @@ youtube-search-cli channel [--query-type id|username|handle] [--max-results N] [
 - `--max-results`: Optional results per page from 1 to 50; default 10.
 - `--next-page-token`: Optional token from a previous response for the next playlist page.
 
+If the `--query-type` parameter isn't specified, it uses `handle` by default and the query can start with or without `@` and must be used if the user provides a username or handle if the user provides a channel URL or username.
+
+The `id` query type should be preferrably used after using the `search` and `playlist` subcommand as its responses provides the list of videos with its associated channel name and ID. 
+
+The `username` should only be used if the user is sure that the channel is still using the legacy username system, otherwise, it should be avoided as Google rolled out the username with handle system in 2022 for all channels, using `handle` is much more preferred if possible and use this as a fallback.
+
 This endpoint returns a `youtube#playlistListResponse` kind, with `id`, `snippet`, and `contentDetails` parts, as it calls playlist endpoint to list videos from the channel.
 
 Performing this operation costs 2 units - one for the channel query and one for the playlist query which lists videos from the queried channel, pagination with `--next-page-token` will cost the same 2 units.
@@ -115,7 +121,7 @@ Assume the standard YouTube Data API allocation is 10,000 quota units per projec
 - Treat each `search` request as 100 units. This permits about 100 search requests if no other operations consume quota.
 - Treat each `playlist`, `channel` or `video` request as 1 unit. Prefer these commands when an ID is already known.
 - Try `yt-dlp` or web search first for discovery when they work in the current environment. Use this binary when API reliability, structured results, cloud-network access, or YouTube Terms of Service compliance matters.
-- Start discovery with `--filter mixed` so one 100-unit request can expose both videos, associated channel, and useful playlists. See [Combinations](#combinations) for ways to stretch the 10,000-unit daily quota.
+- Start discovery with `--filter mixed` so one 100-unit request can expose both videos, associated channel, and useful playlists. See Combinations section below for ways to stretch the 10,000-unit daily quota.
 - Follow relevant playlists with the 1-unit `playlist` command before buying more 100-unit search pages.
 - Choose `--max-results` deliberately. A larger page does not increase the quota cost of that request and can reduce follow-up calls, but it produces more JSON and may waste context on irrelevant results.
 - Treat every `--next-page-token` use as a new API request: another 100 units for `search`, or another 1 unit for `playlist`.
@@ -143,7 +149,7 @@ Keep in mind that this depends on the results shown so these combinations are no
 
 - If `YOUTUBE_DATA_API_KEY` is missing, ask the user to set it in `~/.youtube.env` or in the command environment before retrying.
 - If the binary is missing from `PATH`, ask for its executable path or direct the user to install the release binary.
-- If given a YouTube URL for `video`, extract its video ID. If given a playlist URL for `playlist`, extract its `list` parameter.
+- If given a YouTube URL for `video`, extract its video ID. If given a playlist URL for `playlist`, extract its `list` parameter. If given a channel URL that has a username or handle in the URL, extract the username or handle.
 - If the API reports quota exhaustion, stop retrying and explain which operation consumed quota. Suggest waiting for quota reset or using a non-API discovery method.
 - If the API rejects `--max-results`, keep it between 1 and 50.
 - If the command returns malformed or mixed output, preserve stderr separately and parse stdout as JSON.
