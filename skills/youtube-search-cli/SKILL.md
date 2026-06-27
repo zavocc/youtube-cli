@@ -31,7 +31,7 @@ youtube-search-cli search [--filter video|playlist|channel|mixed] [--max-results
 ```
 
 - `QUERY`: Required search text. Quote it when it contains spaces.
-- `--filter`: Optional result type. Accept `video`, `playlist`, `channel` or `mixed`; default `mixed`.
+- `--filter`: Optional result type. Accept `video`, `playlist`, `channel` or `mixed` (video and playlist); default `mixed`.
 - `--max-results`: Optional results per page from 1 to 50; default 10.
 - `--next-page-token`: Optional token from a previous response for the next result page.
 

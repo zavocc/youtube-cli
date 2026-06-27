@@ -48,7 +48,7 @@ Subcommands include three mode of operations:
 
     Usage:
     ```shell
-   youtube-search-cli search [--filter video|playlist|mixed] [--max-results N] [--next-page-token TOKEN] "QUERY"
+   youtube-search-cli search [--filter video|playlist|channel|mixed] [--max-results N] [--next-page-token TOKEN] "QUERY"
     ```
 
     Examples include: 
@@ -56,13 +56,14 @@ Subcommands include three mode of operations:
     youtube-search-cli search "Never Gonna Give You Up"
     youtube-search-cli search --filter video --max-results 25 "TypeScript tutorials"
     youtube-search-cli search --max-results 50 --next-page-token TOKEN "travel vlogs"
+    youtube-search-cli search --filter channel --max-results 5 "News"
     ```
 
     To see optional flags for `search` subcommand such as filtering or setting number of results per page, try `youtube-search-cli search --help`
 
     Optional flags for this subcommand include:  
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
-    -  `--filter [video|playlist|mixed]` -  filters results, either `video`, `playlist`, or `mixed` (both videos and playlist). By default, if this flag is not set then `mixed` results are shown.
+    -  `--filter [video|playlist|channel|mixed]` -  filters results, either `video`, `playlist`, `channel` or `mixed` (both videos and playlist). By default, if this flag is not set then `mixed` results are shown.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
 
     This endpoint returns a `youtube#searchListResponse` kind, with `id` and `snippet` parts.
@@ -100,7 +101,7 @@ Subcommands include three mode of operations:
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
 
-    This endpoint returns a `youtube#playlistListResponse` kind, with `id`, `snippet`, and `contentDetails` parts.
+    This endpoint returns a `youtube#playlistListResponse` kind, with `id`, `snippet`, and `contentDetails` parts. It's also worth noting that this subcommand costs 2 units, for fetching channel details and fetching videos of a particular channel using playlist endpoint.
 
 - `video` - Fetches the video metadata from a given video ID.
 
