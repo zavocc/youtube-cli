@@ -17,8 +17,6 @@ the CLI program is already capable at it's core for searching, listing videos fr
 
 - [ ] Transcription extraction.
 - [ ] Playlist filtering (e.g. query or conditional matching)
-- [ ] Channels only filter for Search
-- [ ] Concise search results
 
 ## API Quota
 Regardless if you're accessing YouTube Data API v3 with Google Cloud free or paid project, the API maintains a unit based credits system. Each project for each Google account have 10K units a day, with quota increase can only be done by contacting Google Cloud.
