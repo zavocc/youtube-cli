@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/dataapi"
+	"github.com/zavocc/youtube-watcher-cli/internal/dataapi/structs"
 )
 
 func showHelpChan() {
@@ -18,6 +19,7 @@ func showHelpChan() {
 		" --query-type          " + helpChanHelpQueryTypeString + "\n" +
 		" --max-results         " + helpMaxResultsString + "\n" +
 		" --next-page-token     " + helpNextPageTokenString + "\n" +
+		" --compact             " + helpCompactString + "\n" +
 		" query                	Channel ID/username/handle [REQUIRED]" +
 		"\n\n" +
 		"Supplemental options:\n" +
@@ -34,6 +36,7 @@ func runChanQuery(ctx context.Context, args []string) {
 	chanQueryType := flagSet.String("query-type", "handle", helpChanHelpQueryTypeString)
 	maxResults := flagSet.Int64("max-results", 10, helpMaxResultsString)
 	nextPageToken := flagSet.String("next-page-token", "", helpNextPageTokenString)
+	compact := flagSet.Bool("compact", false, helpCompactString)
 	showHelp := flagSet.Bool("help", false, helpShowHelpString)
 
 	// get the leftover positional arguments as a prompt after parsing command line named arguments
@@ -60,11 +63,18 @@ func runChanQuery(ctx context.Context, args []string) {
 	}
 
 	// Serialize and print the channel results as JSON
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(channelResponse); err != nil {
-		fmt.Fprintln(os.Stderr, "An error has occurred while serializing the channel results:", err)
-		os.Exit(1)
+	if *compact {
+		if err := structs.GenerateCompactJsonPlaylists(os.Stdout, channelResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the channel results:", err)
+			os.Exit(1)
+		}
+	} else {
+		encoder := json.NewEncoder(os.Stdout)
+		encoder.SetIndent("", "  ")
+		if err := encoder.Encode(channelResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the channel results:", err)
+			os.Exit(1)
+		}
 	}
 
 	os.Exit(0)

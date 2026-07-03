@@ -65,6 +65,7 @@ Subcommands include three mode of operations:
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
     -  `--filter [video|playlist|channel|mixed]` -  filters results, either `video`, `playlist`, `channel` or `mixed` (both videos and playlist). By default, if this flag is not set then `mixed` results are shown.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
+    -  `--compact` - this compresses the JSON by removing indents, whitespaces, and only outputs necessary information such as title, channel and playlist information, associated IDs, description, publish date, and next page token for videos list excluding the thumbnail. This is good for agents where token efficiency matters.
 
     This endpoint returns a `youtube#searchListResponse` kind, with `id` and `snippet` parts.
 
@@ -80,6 +81,7 @@ Subcommands include three mode of operations:
     Optional flags for this subcommand include:  
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
+    -  `--compact` - this compresses the JSON by removing indents, whitespaces, and only outputs necessary information such as title, channel and playlist information, associated IDs, description, publish date, and next page token for videos list excluding the thumbnail. This is good for agents where token efficiency matters.
 
     This endpoint returns a `youtube#playlistListResponse` kind, with `id`, `snippet`, and `contentDetails` parts.
 
@@ -100,6 +102,7 @@ Subcommands include three mode of operations:
         The channel ID can only be obtained from previous results from `playlist` or `search` endpoints, with the `channelId` field associated with the video.
     -  `--max-results N` - set number of results per page. Max 50, default is 10.
     -  `--next-page-token TOKEN` - paginates to next results, this can be obtained from previous response.
+    -  `--compact` - this compresses the JSON by removing indents, whitespaces, and only outputs necessary information such as title, channel and playlist information, associated IDs, description, publish date, and next page token for videos list excluding the thumbnail. This is good for agents where token efficiency matters.
 
     This endpoint returns a `youtube#playlistListResponse` kind, with `id`, `snippet`, and `contentDetails` parts. It's also worth noting that this subcommand costs 2 units, for fetching channel details and fetching videos of a particular channel using playlist endpoint.
 
@@ -130,7 +133,7 @@ A better workflow for agents would be:
 1. Use traditional tools like `yt-dlp` and Web Search first before hitting blockages.
 2. Perform two separate calls and collect results, one has `mixed` `--filter` type and the other has `playlist` that only shows playlist results. Also consider with pagination (token context efficiency) vs max results (API cost efficiency) tradeoff. For instance, while you can set max results with same unit cost in single pagination, the tradeoff is whether storing raw with irrelevant results is worth storing all into the agent context window.
 3. If relevant playlists are found, it's recommended to iterate pagination of playlists first when needed before doing the same for search results.
-4. Store and cache results in a plain text file or vector search instead storing the whole JSON into the context window when processing search results. To do this, redirect the calls both `stdout` and `stderr` to file and use tools like `grep` and `jq` if necessary.
+4. If not using `--compact` parameter for playlist or search operations, store and cache results in a plain text file or vector search instead storing the whole JSON into the context window when processing search results. To do this, redirect the calls both `stdout` and `stderr` to file and use tools like `grep` and `jq` if necessary.
 
 
 # FAQ

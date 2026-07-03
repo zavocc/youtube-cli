@@ -7,6 +7,7 @@ const (
 
 	// for search.go
 	helpSearchFilterString = "Result type: video, playlist, channel or mixed"
+	helpCompactString      = "Shows a minified JSON output for search results"
 
 	// for  channel.go
 	helpChanHelpQueryTypeString = "Type of query to use for channel search: id, username, or handle"

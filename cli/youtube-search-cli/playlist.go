@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/dataapi"
+	"github.com/zavocc/youtube-watcher-cli/internal/dataapi/structs"
 )
 
 func showHelpPlaylist() {
@@ -17,6 +18,7 @@ func showHelpPlaylist() {
 		"\nPlaylist options:\n" +
 		" --max-results         " + helpMaxResultsString + "\n" +
 		" --next-page-token     " + helpNextPageTokenString + "\n" +
+		" --compact             " + helpCompactString + "\n" +
 		" id                	Playlist ID [REQUIRED]" +
 		"\n\n" +
 		"Supplemental options:\n" +
@@ -32,6 +34,7 @@ func runPlaylistQuery(ctx context.Context, args []string) {
 	// args
 	maxResults := flagSet.Int64("max-results", 10, helpMaxResultsString)
 	nextPageToken := flagSet.String("next-page-token", "", helpNextPageTokenString)
+	compact := flagSet.Bool("compact", false, helpCompactString)
 	showHelp := flagSet.Bool("help", false, helpShowHelpString)
 
 	// get the leftover positional arguments as a prompt after parsing command line named arguments
@@ -58,11 +61,18 @@ func runPlaylistQuery(ctx context.Context, args []string) {
 	}
 
 	// Serialize and print the playlist results as JSON
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(playlistResponse); err != nil {
-		fmt.Fprintln(os.Stderr, "An error has occurred while serializing the playlist results:", err)
-		os.Exit(1)
+	if *compact {
+		if err := structs.GenerateCompactJsonPlaylists(os.Stdout, playlistResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the playlist results:", err)
+			os.Exit(1)
+		}
+	} else {
+		encoder := json.NewEncoder(os.Stdout)
+		encoder.SetIndent("", "  ")
+		if err := encoder.Encode(playlistResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the playlist results:", err)
+			os.Exit(1)
+		}
 	}
 
 	os.Exit(0)

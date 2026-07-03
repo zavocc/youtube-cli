@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/dataapi"
+	"github.com/zavocc/youtube-watcher-cli/internal/dataapi/structs"
 )
 
 func showHelpSearch() {
@@ -18,6 +19,7 @@ func showHelpSearch() {
 		" --filter              " + helpSearchFilterString + "\n" +
 		" --max-results         " + helpMaxResultsString + "\n" +
 		" --next-page-token     " + helpNextPageTokenString + "\n" +
+		" --compact             " + helpCompactString + "\n" +
 		" query                	Search query [REQUIRED]" +
 		"\n\n" +
 		"Supplemental options:\n" +
@@ -34,6 +36,7 @@ func runSearch(ctx context.Context, args []string) {
 	filter := flagSet.String("filter", "mixed", helpSearchFilterString)
 	maxResults := flagSet.Int64("max-results", 10, helpMaxResultsString)
 	nextPageToken := flagSet.String("next-page-token", "", helpNextPageTokenString)
+	compact := flagSet.Bool("compact", false, helpCompactString)
 	showHelp := flagSet.Bool("help", false, helpShowHelpString)
 
 	// get the leftover positional arguments as a prompt after parsing command line named arguments
@@ -59,12 +62,19 @@ func runSearch(ctx context.Context, args []string) {
 		os.Exit(1)
 	}
 
-	// Serialize and print the search results as JSON
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(searchResponse); err != nil {
-		fmt.Fprintln(os.Stderr, "An error has occurred while serializing the search results:", err)
-		os.Exit(1)
+	// Serialize and print the search results as JSON, check  if we need to compact
+	if *compact {
+		if err := structs.GenerateCompactJsonSearch(os.Stdout, searchResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the search results:", err)
+			os.Exit(1)
+		}
+	} else {
+		encoder := json.NewEncoder(os.Stdout)
+		encoder.SetIndent("", "  ")
+		if err := encoder.Encode(searchResponse); err != nil {
+			fmt.Fprintln(os.Stderr, "An error has occurred while serializing the search results:", err)
+			os.Exit(1)
+		}
 	}
 
 	os.Exit(0)

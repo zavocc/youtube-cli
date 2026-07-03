@@ -34,6 +34,8 @@ youtube-search-cli search [--filter video|playlist|channel|mixed] [--max-results
 - `--filter`: Optional result type. Accept `video`, `playlist`, `channel` or `mixed` (video and playlist); default `mixed`.
 - `--max-results`: Optional results per page from 1 to 50; default 10.
 - `--next-page-token`: Optional token from a previous response for the next result page.
+- `--compact`: Optional flag to output deindented and stripped JSON in single line with only including necessary fields for each result, excluding thumbnails.
+
 
 Examples:
 
@@ -57,6 +59,7 @@ youtube-search-cli playlist [--max-results N] [--next-page-token TOKEN] PLAYLIST
 - `PLAYLIST_ID`: Required playlist ID.
 - `--max-results`: Optional results per page from 1 to 50; default 10.
 - `--next-page-token`: Optional token from a previous response for the next playlist page.
+- `--compact`: Optional flag to output deindented and stripped JSON in single line with only including necessary fields for each result, excluding thumbnails.
 
 Example:
 
@@ -79,6 +82,7 @@ youtube-search-cli channel [--query-type id|username|handle] [--max-results N] [
 - `--query-type`: Optional query type; default `handle`. Accepts `id`, `username`, or `handle`.
 - `--max-results`: Optional results per page from 1 to 50; default 10.
 - `--next-page-token`: Optional token from a previous response for the next playlist page.
+- `--compact`: Optional flag to output deindented and stripped JSON in single line with only including necessary fields for each result, excluding thumbnails.
 
 If the `--query-type` parameter isn't specified, it uses `handle` by default and the query can start with or without `@` and must be used if the user provides a username or handle if the user provides a channel URL or username.
 
@@ -126,7 +130,8 @@ Assume the standard YouTube Data API allocation is 10,000 quota units per projec
 - Follow relevant playlists with the 1-unit `playlist` command before buying more 100-unit search pages.
 - Choose `--max-results` deliberately. A larger page does not increase the quota cost of that request and can reduce follow-up calls, but it produces more JSON and may waste context on irrelevant results.
 - Treat every `--next-page-token` use as a new API request: another 100 units for `search`, or another 1 unit for `playlist`.
-- Save large JSON responses to a file and inspect only relevant fields with tools such as `jq` or `rg` instead of loading the entire response into context.
+- Always use `--compact` for `search`, `playlist`, and `channel` operations which reduces the JSON size and context usage. This only excludes thumbnails and other unnecessary fields, and returns in unindented JSON. 
+- If deciding not to use `--compact` due to either user request or in rare cases may not be able to properly obtain necessary results due to errors, save large JSON responses to a file and inspect only relevant fields with tools such as `jq` or `rg`/`grep` instead of loading the entire JSON response into context.
 
 ### Combinations
 
@@ -142,7 +147,7 @@ Keep in mind that this depends on the results shown so these combinations are no
 1. Determine whether the task needs discovery, playlist enumeration, or known-video metadata.
 2. Confirm that the binary is available and that `YOUTUBE_DATA_API_KEY` is configured without exposing its value.
 3. Select the lowest-cost subcommand that can answer the task.
-4. Run the command with named options before the positional query or ID.
+4. Run the command with named arguments before the positional query or ID.
 5. Parse the JSON response and report only the relevant results when necessary. Preserve `nextPageToken` when another page may be needed.
 6. Stop paging once the task is answered; do not spend quota collecting unused results.
 
