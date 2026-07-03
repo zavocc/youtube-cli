@@ -40,6 +40,22 @@ func ValidateModels(model string) (configTemplate, error) {
 				IncludeThoughts: false,
 			},
 		}, nil
+	case "gemini-3.5-flash":
+		return configTemplate{
+			ModelID: "gemini-3.5-flash",
+			ThinkingConfig: &genai.ThinkingConfig{
+				ThinkingLevel:   genai.ThinkingLevelLow,
+				IncludeThoughts: false,
+			},
+		}, nil
+	case "gemini-3.1-pro-preview":
+		return configTemplate{
+			ModelID: "gemini-3.1-pro-preview",
+			ThinkingConfig: &genai.ThinkingConfig{
+				ThinkingLevel:   genai.ThinkingLevelLow,
+				IncludeThoughts: false,
+			},
+		}, nil
 	default:
 		return configTemplate{}, fmt.Errorf("invalid model %q", model)
 	}
