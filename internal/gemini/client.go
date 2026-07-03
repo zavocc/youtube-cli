@@ -59,6 +59,7 @@ func GApiClient(ctx context.Context, prompt string, url string, model string, re
 			MediaResolution:   genai.MediaResolution(mediaResLevel),
 			ResponseMIMEType:  "application/json",
 			ResponseSchema:    resSchema,
+			MaxOutputTokens:   8192,
 		},
 	)
 
