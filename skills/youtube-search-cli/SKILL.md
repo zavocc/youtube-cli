@@ -128,8 +128,8 @@ Assume the standard YouTube Data API allocation is 10,000 quota units per projec
 - Try `yt-dlp` or web search first for discovery when they work in the current environment. Use this binary when API reliability, structured results, cloud-network access, or YouTube Terms of Service compliance matters.
 - Start discovery with `--filter mixed` so one 100-unit request can expose both videos, associated channel, and useful playlists. See Combinations section below for ways to stretch the 10,000-unit daily quota.
 - Follow relevant playlists with the 1-unit `playlist` command before buying more 100-unit search pages.
-- Choose `--max-results` deliberately. A larger page does not increase the quota cost of that request and can reduce follow-up calls, but it produces more JSON and may waste context on irrelevant results.
-- Treat every `--next-page-token` use as a new API request: another 100 units for `search`, or another 1 unit for `playlist`.
+- Choose `--max-results` deliberately. A larger page does not increase the quota cost of that request and can reduce follow-up calls. If using `--compact`, use max results value higher than its defaults (10) to stretch the quota.
+- Treat every `--next-page-token` use as a new API request: another 100 units for `search`, another 1 unit for `playlist`, or 2 units for `channel`.
 - Always use `--compact` for `search`, `playlist`, and `channel` operations which reduces the JSON size and context usage. This only excludes thumbnails and other unnecessary fields, and returns in unindented JSON. 
 - If deciding not to use `--compact` due to either user request or in rare cases may not be able to properly obtain necessary results due to errors, save large JSON responses to a file and inspect only relevant fields with tools such as `jq` or `rg`/`grep` instead of loading the entire JSON response into context.
 
