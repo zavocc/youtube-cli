@@ -54,7 +54,7 @@ Note that these variables must be explicitly set otherwise it will fail.
 
 Authentication depends on your setup, it will auto-discover your existing authentication configuration. For example, if you decide to authenticate as service account json, you would set `GOOGLE_APPLICATION_CREDENTIALS` environment variable pointing to JSON file. The tool does not check this environment variable existence. See https://docs.cloud.google.com/docs/authentication for more information.
 
-Vertex express mode is not supported at this time, set Gemini API key from AI studio for free tier requests with `gemini-3.1-flash-lite`.
+Vertex express mode is not supported at this time, set Gemini API key from AI studio for free tier requests with `gemini-3.5-flash-lite`.
 
 ## Installing the agent skill
 The `youtube-watcher-cli` agent skill allows the agents of your choice effectively use this tool and understand YouTube videos. To install, use the `npx skills` command:
@@ -95,7 +95,7 @@ go build -o .\outputs\youtube-watcher-cli.exe
 
 # FAQ
 ### What is the default model used?
-Gemini 2.5 Flash with 1024 thinking budgets.
+Gemini 3 Flash with minimal reasoning effort.
 
 ### Are other non Gemini models will be supported in the future for analyzing YouTube video as a subagent?
 No, there are no plans for it. Video understanding capabilities with YouTube videos is only exclusive with Gemini models. However, this utility is designed for other agent harnesses with non-Google models to ask questions about the video.

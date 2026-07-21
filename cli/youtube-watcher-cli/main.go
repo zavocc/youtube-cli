@@ -24,9 +24,9 @@ func showHelp() {
 		" --version  Print version" +
 		"\n\n" +
 		"Supported models:\n" +
-		" - gemini-2.5-flash (with 1024 thinking budget)\n" +
 		" - gemini-3-flash-preview (with minimal thinking level)\n" +
-		" - gemini-3.1-flash-lite (with low thinking level)"
+		" - gemini-3.5-flash-lite (with low thinking level)\n" +
+		" - gemini-3.6-flash (with minimal thinking level)"
 
 	fmt.Println(helpString)
 }
