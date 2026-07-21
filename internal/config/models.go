@@ -11,19 +11,8 @@ type configTemplate struct {
 	ThinkingConfig *genai.ThinkingConfig
 }
 
-// Thinking budgets
-var thinkingBudget = int32(1000)
-
 func ValidateModels(model string) (configTemplate, error) {
 	switch model {
-	case "gemini-2.5-flash":
-		return configTemplate{
-			ModelID: "gemini-2.5-flash",
-			ThinkingConfig: &genai.ThinkingConfig{
-				ThinkingBudget:  &thinkingBudget,
-				IncludeThoughts: false,
-			},
-		}, nil
 	case "gemini-3-flash-preview":
 		return configTemplate{
 			ModelID: "gemini-3-flash-preview",
@@ -32,11 +21,19 @@ func ValidateModels(model string) (configTemplate, error) {
 				IncludeThoughts: false,
 			},
 		}, nil
-	case "gemini-3.1-flash-lite":
+	case "gemini-3.5-flash-lite":
 		return configTemplate{
-			ModelID: "gemini-3.1-flash-lite",
+			ModelID: "gemini-3.5-flash-lite",
 			ThinkingConfig: &genai.ThinkingConfig{
 				ThinkingLevel:   genai.ThinkingLevelLow,
+				IncludeThoughts: false,
+			},
+		}, nil
+	case "gemini-3.6-flash":
+		return configTemplate{
+			ModelID: "gemini-3.6-flash",
+			ThinkingConfig: &genai.ThinkingConfig{
+				ThinkingLevel:   genai.ThinkingLevelMinimal,
 				IncludeThoughts: false,
 			},
 		}, nil
