@@ -17,6 +17,7 @@ func showHelp() {
 		" --video             YouTube video URL or ID [REQUIRED]\n" +
 		" --model             Model to use for inference, defaults to " + gemini.DefaultModel + "\n" +
 		" --media-resolution  Media resolution for the video. Possible values are only low, high. If not set, it will default for low resolution\n" +
+		" --service-tier	  Service tier. Possible values are 'flex' or 'priority'. Leave this for standard rates processing.\n" +
 		" prompt              Prompt to ask questions about the video [REQUIRED]" +
 		"\n\n" +
 		"Supplemental options:\n" +
@@ -47,6 +48,7 @@ func main() {
 	videoID := flag.String("video", "", "YouTube Video URL or ID")
 	selectedModel := flag.String("model", gemini.DefaultModel, "Model to use")
 	mediaRes := flag.String("media-resolution", "low", "Media resolution for the video (low, medium, high)")
+	serviceTier := flag.String("service-tier", "standard", "Service tier for processing")
 	invokeVersion := flag.Bool("version", false, "Print version")
 	flag.Parse()
 
@@ -75,7 +77,7 @@ func main() {
 
 	//  dereference videoID so it can be passed as a string normally
 	ctx := context.Background()
-	result, err := gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes)
+	result, err := gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "An error has occurred - ", err)
 		os.Exit(1)

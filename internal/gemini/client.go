@@ -9,7 +9,7 @@ import (
 	"google.golang.org/genai"
 )
 
-func GApiClient(ctx context.Context, prompt string, url string, model string, resolution string) (string, error) {
+func GApiClient(ctx context.Context, prompt string, url string, model string, resolution string, serviceTier string) (string, error) {
 	client, err := initGeminiClient(ctx)
 	if err != nil {
 		return "", fmt.Errorf("initialize the Gemini API client: %w", err)
@@ -23,6 +23,19 @@ func GApiClient(ctx context.Context, prompt string, url string, model string, re
 		actualUrl = strings.Split(url, "&")[0] // Remove any additional query parameters after the video ID
 	} else {
 		return "", fmt.Errorf("invalid YouTube video ID or URL specified")
+	}
+
+	// Check if service tier is flex, priority, or standard
+	var parsedServiceTier genai.ServiceTier
+	switch strings.ToLower(strings.TrimSpace(serviceTier)) {
+	case "flex":
+		parsedServiceTier = genai.ServiceTierFlex
+	case "priority":
+		parsedServiceTier = genai.ServiceTierPriority
+	case "standard":
+		// Keep the zero value so serviceTier is omitted from the request.
+	default:
+		return "", fmt.Errorf("invalid service tier specified. Must be 'flex', 'priority', or 'standard'")
 	}
 
 	// Validate model and get corresponding config
@@ -60,6 +73,7 @@ func GApiClient(ctx context.Context, prompt string, url string, model string, re
 			ResponseMIMEType:  "application/json",
 			ResponseSchema:    resSchema,
 			MaxOutputTokens:   8192,
+			ServiceTier:       parsedServiceTier,
 		},
 	)
 
