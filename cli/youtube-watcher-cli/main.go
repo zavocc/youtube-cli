@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/gemini"
 	"github.com/zavocc/youtube-watcher-cli/internal/shared"
@@ -55,14 +55,17 @@ func main() {
 		printVersion()
 	}
 
-	// get the leftover positional arguments as a prompt after parsing command line named arguments
-	args := flag.Args()
-	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "A prompt is required along with --video")
+	// Prefer the positional prompt, then fall back to redirected stdin.
+	prompt, err := shared.ReadTextInput(flag.Args(), os.Stdin)
+	if err != nil {
+		if errors.Is(err, shared.ErrNoTextInput) {
+			fmt.Fprintln(os.Stderr, "A prompt is required as an argument or through stdin")
+		} else {
+			fmt.Fprintln(os.Stderr, "Unable to read the prompt:", err)
+		}
 		showHelp()
 		os.Exit(1)
 	}
-	prompt := strings.Join(args, " ")
 
 	// check if --id is set
 	if *videoID == "" {

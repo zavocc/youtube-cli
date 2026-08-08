@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/dataapi"
 	"github.com/zavocc/youtube-watcher-cli/internal/dataapi/structs"
+	"github.com/zavocc/youtube-watcher-cli/internal/shared"
 )
 
 func showHelpSearch() {
@@ -39,16 +40,24 @@ func runSearch(ctx context.Context, args []string) {
 	compact := flagSet.Bool("compact", false, helpCompactString)
 	showHelp := flagSet.Bool("help", false, helpShowHelpString)
 
-	// get the leftover positional arguments as a prompt after parsing command line named arguments
 	flagSet.Parse(args)
-	queryArgs := flagSet.Args()
 
-	// Show help and exit regardless of  other arguments if --help is provided or if no search query is supplied
-	if len(queryArgs) == 0 || *showHelp {
+	if *showHelp {
 		showHelpSearch()
 		os.Exit(1)
 	}
-	query := strings.Join(queryArgs, " ")
+
+	// Prefer the positional query, then fall back to redirected stdin.
+	query, err := shared.ReadTextInput(flagSet.Args(), os.Stdin)
+	if err != nil {
+		if errors.Is(err, shared.ErrNoTextInput) {
+			fmt.Fprintln(os.Stderr, "A search query is required as an argument or through stdin")
+		} else {
+			fmt.Fprintln(os.Stderr, "Unable to read the search query:", err)
+		}
+		showHelpSearch()
+		os.Exit(1)
+	}
 
 	service, err := newYouTubeService(ctx)
 	if err != nil {
