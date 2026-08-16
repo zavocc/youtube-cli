@@ -1,6 +1,10 @@
 package gemini
 
-import "google.golang.org/genai"
+import (
+	"github.com/OpenRouterTeam/go-sdk/models/components"
+	"github.com/OpenRouterTeam/go-sdk/optionalnullable"
+	"google.golang.org/genai"
+)
 
 func genResponseSchema() *genai.Schema {
 	return &genai.Schema{
@@ -38,4 +42,52 @@ func genResponseSchema() *genai.Schema {
 			"answer",
 		},
 	}
+}
+
+func genResponseSchemaOpenRouter() components.ResponseFormat {
+	description := "Answer the prompt grounded from the video."
+	strict := true
+
+	return components.CreateResponseFormatJSONSchema(
+		components.ChatFormatJSONSchemaConfig{
+			JSONSchema: components.ChatJSONSchemaConfig{
+				Name:        "answer_video",
+				Description: &description,
+				Strict:      optionalnullable.From(&strict),
+				Schema: map[string]any{
+					"type": "object",
+					"properties": map[string]any{
+						"answer": map[string]any{
+							"type":        "string",
+							"description": "Direct answer to the user's prompt about the video.",
+						},
+						"evidence_timestamps": map[string]any{
+							"type":        "array",
+							"description": "Supporting timestamp and passages from the video supporting the answer.",
+							"items": map[string]any{
+								"type": "object",
+								"properties": map[string]any{
+									"timestamp": map[string]any{
+										"type":        "string",
+										"description": "Video timestamp in MM:SS or HH:MM:SS format.",
+									},
+									"passage": map[string]any{
+										"type":        "string",
+										"description": "Short observation, quote, or paraphrase from that timestamp.",
+									},
+								},
+								"required": []string{
+									"timestamp",
+									"passage",
+								},
+							},
+						},
+					},
+					"required": []string{
+						"answer",
+					},
+				},
+			},
+		},
+	)
 }

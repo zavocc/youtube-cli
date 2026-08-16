@@ -50,6 +50,7 @@ func main() {
 	selectedModel := flag.String("model", gemini.DefaultModel, helpModelString)
 	mediaRes := flag.String("media-resolution", "low", helpMediaResolutionString)
 	serviceTier := flag.String("service-tier", "standard", helpServiceTierString)
+	isOpenRouter := flag.Bool("openrouter", false, helpOpenRouterString)
 	invokeVersion := flag.Bool("version", false, helpVersionString)
 	flag.Parse()
 
@@ -76,9 +77,27 @@ func main() {
 		os.Exit(1)
 	}
 
+	// explicitly block out and disable the explict use of --media-resolution when using OpenRouter, since it is not supported there
+	mediaResWasSet := false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name == "media-resolution" {
+			mediaResWasSet = true
+		}
+	})
+
+	if *isOpenRouter && mediaResWasSet {
+		fmt.Fprintln(os.Stderr, "--media-resolution is not available when using OpenRouter.")
+		os.Exit(1)
+	}
+
 	//  dereference videoID so it can be passed as a string normally
 	ctx := context.Background()
-	result, err := gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier)
+	var result string
+	if *isOpenRouter {
+		result, err = gemini.ORouterClient(ctx, prompt, *videoID, *selectedModel, *serviceTier)
+	} else {
+		result, err = gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier)
+	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "An error has occurred - ", err)
 		os.Exit(1)
