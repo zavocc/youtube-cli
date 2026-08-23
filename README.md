@@ -40,6 +40,9 @@ Download the binary through the [releases](https://github.com/zavocc/youtube-wat
 After the binary is placed onto the `PATH` environment variable, you must then set `GEMINI_API_KEY` environment variable or this program will not work.
 
 ## Authentication
+### OpenRouter
+Set `OPENROUTER_API_KEY` to use [OpenRouter](https://openrouter.ai) unified auth and billing instead of official endpoints. Must have `--openrouter` flag set.
+
 ### Gemini API (AI Studio)
 You can either set `GEMINI_API_KEY` in `~/.youtube.env` or directly setting into the terminal. For coding agents, it's recommended to set the former so you don't have to directly invoke the API key to the prompt.
 
@@ -79,6 +82,7 @@ Note that the prompt must be at the end of the argument, either quoted or unquot
 - `--video [YOUTUBE_VIDEO_ID_OR_URL]` - Either the public YouTube video URL or ID of the video itself.
 - `--model [MODEL_ID]` - An optional parameter of model ID to set to analyze videos, please see [models list](./internal/config/models.go) for list of supported model and defaults.
 - `--media-resolution [low|high]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters.
+- `--service-tier [flex|standard|priority]` - Optional (defaults to standard). Sets priority processing that trades speed vs cost, for most configurations and to match Gemini models billing, leave it or set it to `standard`, use `flex` if cost saving matters in expense for sheddable and higher latency requests, `priority` if speed matters over cost with higher API rates (falls back to `standard` with standard rates).
 - `--help` - Shows help, ignores other parameters.
 
 `prompt` is placed at the end after named arguments, any arguments placed after `prompt` will be treated as part of the prompt as is. So passing `--model gemini-3-flash-preview` after `prompt` would be treated as prompt.
