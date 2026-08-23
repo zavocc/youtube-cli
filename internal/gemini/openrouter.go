@@ -84,9 +84,18 @@ func ORouterClient(ctx context.Context, prompt string, url string, model string,
 	// Create the chat request
 	responseFormat := genResponseSchemaOpenRouter()
 	temperatureNullable := 0.0
+	allowProviderFallbacks := false
+	onlyProviders := []components.ProviderPreferencesOnly{
+		components.CreateProviderPreferencesOnlyStr("google-ai-studio"),
+	}
+	providerPreferences := components.ProviderPreferences{
+		AllowFallbacks: optionalnullable.From(&allowProviderFallbacks),
+		Only:           optionalnullable.From(&onlyProviders),
+	}
 	result, err := orClient.Chat.Send(ctx, components.ChatRequest{
 		Messages:       contents,
 		Model:          &modelSelectedConfig.ModelID,
+		Provider:       optionalnullable.From(&providerPreferences),
 		Reasoning:      modelSelectedConfig.ThinkingConfig,
 		ServiceTier:    optionalnullable.From(&parsedServiceTier),
 		ResponseFormat: &responseFormat,
