@@ -13,6 +13,16 @@ Use the `youtube-watcher-cli` binary when a task needs grounded understanding of
 - Expect `youtube-watcher-cli` or `youtube-watcher-cli.exe` to be available on `PATH`, unless the user provides an explicit executable path.
 - Use the video parameter with `--video`.
 
+### Environment variables
+
+The executable authenticates and reads through these environment variables, please note that it's recommended to run and perform first pass operation instead of checking these variables first before continuing.
+
+For troubleshooting guidance, refer to Failure Handling section below.
+
+- `OPENROUTER_API_KEY` - Used if `--openrouter` flag is used to authenticate with OpenRouter key and endpoint. This ignores other variables below.
+- `GEMINI_API_KEY` - If set, it will use Gemini Developer API instead of Gemini Enterprise Agent Platform (Vertex AI).
+- `GOOGLE_GENAI_USE_ENTERPRISE` and `GOOGLE_CLOUD_PROJECT` - If set, it will use Gemini Enterprise Agent Platform (Vertex AI) global endpoint instead of Gemini Developer API version. This only toggles to use the Vertex endpoint, authentication is still handled by the user side. The user can also set regions using `GOOGLE_CLOUD_LOCATION` variable.
+
 ## Arguments
 
 ```bash
@@ -23,6 +33,7 @@ youtube-watcher-cli --video [YOUTUBE_VIDEO_ID_OR_URL] --model [MODEL_ID] --servi
 - `--model [MODEL_ID]`: Optional. Specify a model to use to process the video, defaults to `gemini-2.5-flash` if not specified. See the supported models section below for choosing model.
 - `--media-resolution [RESOLUTION]`: Optional. Specify the media resolution for the video, such as `low` or `high`. Defaults to `low` if not provided. Use `low` to prioritize speed and cost over extreme fine-detail, and `high` for better visual fidelity and fine details over cost of speed and budget.
 - `--service-tier [TIER]`: Optional. Specify the service tier for processing, such as `flex` or `priority`. Defaults to `standard` if not provided. Use `flex` for lower cost and slower processing, and `priority` for faster processing at a higher cost. Note that using `priority` processing must be consented by the user first acknowledging that it will incur higher costs and may be subject to rate limits or quotas.
+- `--openrouter`: Optional. Uses OpenRouter served model instead of official Google's endpoints, `OPENROUTER_API_KEY` must be set or present in the environment.
 
 `prompt` must be placed after all named arguments. The tool joins all remaining positional arguments into a prompt.
 
@@ -38,7 +49,7 @@ Do not place named options after the prompt. Anything after the prompt is treate
 
 - `gemini-3-flash-preview` - Best balance for speed, cost, and intelligence. Outperforming it's 2.5 Pro predecessor. It is the default with minimal reasoning effort.
 - `gemini-3.5-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than 3 Flash Preview. Useful for quick video overviews and long videos for time and budget constrained scenarios. Use of this model has reasoning effort to low.
-- `gemini-3.6-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, but it is expensive than 3 Flash model and should only be used for more insightful analysis for it's performance. Uses minimal reasoning effort
+- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, but it is expensive than 3 Flash model and should only be used for more insightful analysis for it's performance. Uses low reasoning effort
 
 ## Workflow
 
