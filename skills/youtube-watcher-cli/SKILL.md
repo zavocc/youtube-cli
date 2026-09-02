@@ -53,7 +53,7 @@ When using Gemini 3.5 Flash Lite or Gemini 3.7 Flash and above, it's recommended
 
 Use agentic processing as a default processing mode for recent models after Gemini 3 Flash Preview, it's also recommended to use this for longer videos beyond an hour, videos that require more detailed or temporal understanding, fast pacing videos, and searching segments within the compilation video.
 
-Please note that agentic processing can still incur higher costs and latency for exhaustive tasks due to tool calling invocations it needed to conduct and each intermediary tool call can incur additional time and token costs, it's recommended to start with Gemini Flash-Lite first before promoting to Gemini Flash. Optimization can still be applied such as prompting, setting service tier, and media resolution.
+Please note that agentic processing can still incur higher costs and latency for exhaustive tasks due to tool calling invocations it needed to conduct analysis and each intermediary tool call can incur additional time and token costs, it's recommended to start with Gemini Flash-Lite first before promoting to Gemini Flash. Optimization can still be applied such as prompting, setting service tier, and media resolution.
 
 Only use static processing by omitting the flag for Gemini 3 Flash Preview or when the user explicitly asks to, this mode supports all models. This was the behavior of Gemini models prior to the recent models when understanding videos, it is fixed, static, and configured to sample frames at 1fps, only use this to ensure legacy consistent performance or if needing all the context to be considered without intermediate tool calling step time.
 
