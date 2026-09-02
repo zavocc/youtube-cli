@@ -38,7 +38,7 @@ func ValidateModels(model string) (configTemplate, error) {
 		return configTemplate{
 			ModelID: "gemini-3.5-flash-lite",
 			ThinkingConfig: &genai.ThinkingConfig{
-				ThinkingLevel:   genai.ThinkingLevelLow,
+				ThinkingLevel:   genai.ThinkingLevelMedium,
 				IncludeThoughts: false,
 			},
 			SupportsAgentic: true,
@@ -70,7 +70,7 @@ func ValidateModelsOpenRouter(model string) (configTemplateOpenRouter, error) {
 		return configTemplateOpenRouter{
 			ModelID: "gemini-3.5-flash-lite",
 			ThinkingConfig: &components.ChatRequestReasoning{
-				Effort: chatRequestEffort(components.ChatRequestEffortLow),
+				Effort: chatRequestEffort(components.ChatRequestEffortMedium),
 			},
 		}, nil
 	case "gemini-3.7-flash":
