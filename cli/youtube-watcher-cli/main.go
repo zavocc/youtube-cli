@@ -28,7 +28,7 @@ func showHelp() {
 		"\n\n" +
 		"Supported models:\n" +
 		" - gemini-3-flash-preview (with minimal thinking level)\n" +
-		" - gemini-3.5-flash-lite (with low thinking level)\n" +
+		" - gemini-3.5-flash-lite (with medium thinking level)\n" +
 		" - gemini-3.7-flash (with low thinking level)"
 
 	fmt.Println(helpString)
