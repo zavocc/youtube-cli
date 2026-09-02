@@ -85,6 +85,7 @@ Quote the prompt if the shell or command runner requires it, but keep it as the 
 
 
 ## Model Outputs
+
 When making a request, it returns a structured JSON output (excluding if an error has occurred) that displays brief description of the video and optionally timestamps including an associated description of the timestamped passage. The timestamps are formatted as DD:HH:MM:SS with proper time conversion. The JSON output is deliberate and it's format cannot be changed.
 
 ## Pipelines and redirection
