@@ -53,6 +53,8 @@ When using Gemini 3.5 Flash Lite or Gemini 3.7 Flash and above, it's recommended
 
 Use agentic processing as a default processing mode for recent models after Gemini 3 Flash Preview, it's also recommended to use this for longer videos beyond an hour, videos that require more detailed or temporal understanding, fast pacing videos, and searching segments within the compilation video.
 
+Please note that agentic processing can still incur higher costs and latency for exhaustive tasks due to tool calling invocations it needed to conduct and each intermediary tool call can incur additional time and token costs, it's recommended to start with Gemini Flash-Lite first before promoting to Gemini Flash. Optimization can still be applied such as prompting, setting service tier, and media resolution.
+
 Only use static processing by omitting the flag for Gemini 3 Flash Preview or when the user explicitly asks to, this mode supports all models. This was the behavior of Gemini models prior to the recent models when understanding videos, it is fixed, static, and configured to sample frames at 1fps, only use this to ensure legacy consistent performance or if needing all the context to be considered without intermediate tool calling step time.
 
 If the user asks to summarize videos beyond an hour or working with videos such as compilation style formats, suggest the user first to use agentic processing with models that supports it even if the user is explicitly asking for static processing or is using Gemini 3 Flash Preview.
@@ -61,7 +63,7 @@ If the user asks to summarize videos beyond an hour or working with videos such 
 
 - `gemini-3-flash-preview` - Best balance for speed, cost, and intelligence. Outperforming it's 2.5 Pro predecessor. It is the default with minimal reasoning effort. This does not support agentic processing and is not recommended for long or fast pacing videos.
 - `gemini-3.5-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than 3 Flash Preview. Useful for quick video overviews and faster processing of long videos for time and budget constrained scenarios. Use of this model has reasoning effort to low.
-- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model.
+- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, with reasoning effort set to low. However, it is more expensive and has higher latency than other two models.
 
 ## Workflow
 
