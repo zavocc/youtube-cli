@@ -9,7 +9,7 @@ import (
 	"google.golang.org/genai"
 )
 
-func GApiClient(ctx context.Context, prompt string, url string, model string, resolution string, serviceTier string) (string, error) {
+func GApiClient(ctx context.Context, prompt string, url string, model string, resolution string, serviceTier string, agenticProcessing bool) (string, error) {
 	client, err := initGeminiClient(ctx)
 	if err != nil {
 		return "", fmt.Errorf("initialize the Gemini API client: %w", err)
@@ -53,9 +53,27 @@ func GApiClient(ctx context.Context, prompt string, url string, model string, re
 	//	Level: config.ParseMediaResolution(resolution),
 	// }
 
+	// check if we can set agentic processing
+	var agenticProcessingMode genai.MediaProcessing
+	if agenticProcessing {
+		// check if the model supports agentic processing
+		if !modelSelectedConfig.SupportsAgentic {
+			return "", fmt.Errorf("the selected model %q does not support agentic processing", model)
+		}
+		agenticProcessingMode = genai.MediaProcessingAgentic
+	} else {
+		agenticProcessingMode = genai.MediaProcessingStatic
+	}
+
 	contents := []*genai.Content{
 		genai.NewContentFromParts([]*genai.Part{
-			genai.NewPartFromURI(actualUrl, "video/mp4"),
+			{
+				FileData: &genai.FileData{
+					FileURI:  actualUrl,
+					MIMEType: "video/mp4",
+				},
+				MediaProcessing: agenticProcessingMode,
+			},
 			genai.NewPartFromText(prompt),
 		}, genai.RoleUser),
 	}

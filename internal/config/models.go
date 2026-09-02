@@ -9,8 +9,9 @@ import (
 )
 
 type configTemplate struct {
-	ModelID        string
-	ThinkingConfig *genai.ThinkingConfig
+	ModelID         string
+	ThinkingConfig  *genai.ThinkingConfig
+	SupportsAgentic bool
 }
 
 type configTemplateOpenRouter struct {
@@ -31,6 +32,7 @@ func ValidateModels(model string) (configTemplate, error) {
 				ThinkingLevel:   genai.ThinkingLevelMinimal,
 				IncludeThoughts: false,
 			},
+			SupportsAgentic: false,
 		}, nil
 	case "gemini-3.5-flash-lite":
 		return configTemplate{
@@ -39,6 +41,7 @@ func ValidateModels(model string) (configTemplate, error) {
 				ThinkingLevel:   genai.ThinkingLevelLow,
 				IncludeThoughts: false,
 			},
+			SupportsAgentic: true,
 		}, nil
 	case "gemini-3.7-flash":
 		return configTemplate{
@@ -47,6 +50,7 @@ func ValidateModels(model string) (configTemplate, error) {
 				ThinkingLevel:   genai.ThinkingLevelLow,
 				IncludeThoughts: false,
 			},
+			SupportsAgentic: true,
 		}, nil
 	default:
 		return configTemplate{}, fmt.Errorf("invalid model %q", model)

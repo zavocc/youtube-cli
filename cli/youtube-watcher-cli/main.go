@@ -19,6 +19,7 @@ func showHelp() {
 		" --media-resolution  " + helpMediaResolutionString + "\n" +
 		" --service-tier	  " + helpServiceTierString + "\n" +
 		" --openrouter        " + helpOpenRouterString + "\n" +
+		" --agentic-processing  " + helpUseAgenticProcessing + "\n" +
 		" prompt              " + helpPromptString +
 		"\n\n" +
 		"Supplemental options:\n" +
@@ -51,6 +52,7 @@ func main() {
 	mediaRes := flag.String("media-resolution", "low", helpMediaResolutionString)
 	serviceTier := flag.String("service-tier", "standard", helpServiceTierString)
 	isOpenRouter := flag.Bool("openrouter", false, helpOpenRouterString)
+	isAgentic := flag.Bool("agentic-processing", false, helpUseAgenticProcessing)
 	invokeVersion := flag.Bool("version", false, helpVersionString)
 	flag.Parse()
 
@@ -77,16 +79,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	// explicitly block out and disable the explict use of --media-resolution when using OpenRouter, since it is not supported there
+	// explicitly block out and disable the explict use of --media-resolution and --agentic-processing when using OpenRouter, since it is not supported there
 	mediaResWasSet := false
+	agenticWasSet := false
 	flag.Visit(func(f *flag.Flag) {
 		if f.Name == "media-resolution" {
 			mediaResWasSet = true
+		}
+		if f.Name == "agentic-processing" {
+			agenticWasSet = true
 		}
 	})
 
 	if *isOpenRouter && mediaResWasSet {
 		fmt.Fprintln(os.Stderr, "--media-resolution is not available when using OpenRouter.")
+		os.Exit(1)
+	}
+
+	if *isOpenRouter && agenticWasSet {
+		fmt.Fprintln(os.Stderr, "--agentic-processing is not available when using OpenRouter.")
 		os.Exit(1)
 	}
 
@@ -96,7 +107,7 @@ func main() {
 	if *isOpenRouter {
 		result, err = gemini.ORouterClient(ctx, prompt, *videoID, *selectedModel, *serviceTier)
 	} else {
-		result, err = gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier)
+		result, err = gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier, *isAgentic)
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "An error has occurred - ", err)
