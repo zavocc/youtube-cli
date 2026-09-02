@@ -25,11 +25,9 @@ It is currently minimalistic program that takes prompt and video ID as input, an
 - [X] Basic functionality
 - [ ] Full Linux support and `Makefile` builds
 - [ ] Full scripting support such as pipelines (piping commands as prompt), file descriptors like stderr for errors
-- [x] Gemini model picker that supports video input (For now it supports 2.5 Flash, 3 Flash, and 3.1 Flash-Lite)
+- [x] Gemini model choices with selection of flash models.
 - [x] Gemini Enterprise Agent Platform (aka Vertex AI) endpoint support and ADC auth
-- [ ] Flex and Priority inference for budget tuning
-- [ ] Nano Banana 2 based frame extraction
-- [ ] Optional Gemma 4-based guardrails for both input and output
+- [x] Flex and Priority inference for budget tuning
 - [x] Video processing controls such as media resolution and start/end offset parameter*
 
 *As of 06/23/26, only media resolution parameter is implemented.
@@ -81,8 +79,9 @@ Note that the prompt must be at the end of the argument, either quoted or unquot
 ## Parameters
 - `--video [YOUTUBE_VIDEO_ID_OR_URL]` - Either the public YouTube video URL or ID of the video itself.
 - `--model [MODEL_ID]` - An optional parameter of model ID to set to analyze videos, please see [models list](./internal/config/models.go) for list of supported model and defaults.
-- `--media-resolution [low|high]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters.
+- `--media-resolution [low|high]` - An optional parameter to set the visual quality when processing video. Use low where speed and cost matters over fine-detail, high if fine detail matters. This option is not supported when using `--openrouter` flag.
 - `--service-tier [flex|standard|priority]` - Optional (defaults to standard). Sets priority processing that trades speed vs cost, for most configurations and to match Gemini models billing, leave it or set it to `standard`, use `flex` if cost saving matters in expense for sheddable and higher latency requests, `priority` if speed matters over cost with higher API rates (falls back to `standard` with standard rates).
+- `--agentic-processing` - Optional (defaults to static processing when omitted). Instead of ingesting the entire video content to context, Gemini will use tools to dynamically analyze video frames or audio to find relevant parts of the video. It's recommended to set this for recent models such as Gemini 3.7 Flash and Gemini 3.5 Flash-Lite, as it performs as good as static processing while keeping token cost and latency lower. Note that Gemini 3 Flash does not support this mode and it is not supported when using `--openrouter` flag.
 - `--help` - Shows help, ignores other parameters.
 
 `prompt` is placed at the end after named arguments, any arguments placed after `prompt` will be treated as part of the prompt as is. So passing `--model gemini-3-flash-preview` after `prompt` would be treated as prompt.

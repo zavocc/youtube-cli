@@ -31,8 +31,9 @@ youtube-watcher-cli --video [YOUTUBE_VIDEO_ID_OR_URL] --model [MODEL_ID] --servi
 
 - `--video [YOUTUBE_VIDEO_ID_OR_URL]`: Required. Pass only the video ID or URL, such as `dQw4w9WgXcQ` or `https://www.youtube.com/watch?v=dQw4w9WgXcQ`.
 - `--model [MODEL_ID]`: Optional. Specify a model to use to process the video, defaults to `gemini-2.5-flash` if not specified. See the supported models section below for choosing model.
-- `--media-resolution [RESOLUTION]`: Optional. Specify the media resolution for the video, such as `low` or `high`. Defaults to `low` if not provided. Use `low` to prioritize speed and cost over extreme fine-detail, and `high` for better visual fidelity and fine details over cost of speed and budget.
+- `--media-resolution [RESOLUTION]`: Optional. Specify the media resolution for the video, such as `low` or `high`. Defaults to `low` if not provided. Use `low` to prioritize speed and cost over extreme fine-detail, and `high` for better visual fidelity and fine details over cost of speed and budget. This option is not available when using `--openrouter` flag.
 - `--service-tier [TIER]`: Optional. Specify the service tier for processing, such as `flex` or `priority`. Defaults to `standard` if not provided. Use `flex` for lower cost and slower processing, and `priority` for faster processing at a higher cost. Note that using `priority` processing must be consented by the user first acknowledging that it will incur higher costs and may be subject to rate limits or quotas.
+- `--agentic-processing`: Optional. This option instructs Gemini to use tools to dynamically seek through video frames and audio to find relevant information in a loop rather than ingesting the entire video to context window. This is recommended for most recent models and should be enabled by default, please refer to "Static vs. Agentic Processing" section below for more details. This option is not available when using `--openrouter` flag.
 - `--openrouter`: Optional. Uses OpenRouter served model instead of official Google's endpoints, `OPENROUTER_API_KEY` must be set or present in the environment.
 
 `prompt` must be placed after all named arguments. The tool joins all remaining positional arguments into a prompt.
@@ -45,11 +46,22 @@ These will be prioritized if provided, overrides other parameters and only print
 
 Do not place named options after the prompt. Anything after the prompt is treated as prompt text.
 
+## Static vs. Agentic Processing
+By default, the watcher CLI uses static processing with Gemini 3 Flash, this is the default behavior for  Gemini models as primary way to ingest video and audio content.
+
+When using Gemini 3.5 Flash Lite or Gemini 3.7 Flash and above, it's recommended to use `--agentic-processing` flag, what it does is instead of ingesting the entire video and it's audio to context window, Gemini models will use tools to dynamically seek through video frames, transcript, or audio at specific times. It is also much faster and cheaper especially for longer videos as it only grabs relevant parts of the video on demand.
+
+Use agentic processing as a default processing mode for recent models after Gemini 3 Flash Preview, it's also recommended to use this for longer videos beyond an hour, videos that require more detailed or temporal understanding, fast pacing videos, and searching segments within the compilation video.
+
+Only use static processing by omitting the flag for Gemini 3 Flash Preview or when the user explicitly asks to, this mode supports all models. This was the behavior of Gemini models prior to the recent models when understanding videos, it is fixed, static, and configured to sample frames at 1fps, only use this to ensure legacy consistent performance or if needing all the context to be considered without intermediate tool calling step time.
+
+If the user asks to summarize videos beyond an hour or working with videos such as compilation style formats, suggest the user first to use agentic processing with models that supports it even if the user is explicitly asking for static processing or is using Gemini 3 Flash Preview.
+
 ## Supported models
 
-- `gemini-3-flash-preview` - Best balance for speed, cost, and intelligence. Outperforming it's 2.5 Pro predecessor. It is the default with minimal reasoning effort.
-- `gemini-3.5-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than 3 Flash Preview. Useful for quick video overviews and long videos for time and budget constrained scenarios. Use of this model has reasoning effort to low.
-- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, but it is expensive than 3 Flash model and should only be used for more insightful analysis for it's performance. Uses low reasoning effort
+- `gemini-3-flash-preview` - Best balance for speed, cost, and intelligence. Outperforming it's 2.5 Pro predecessor. It is the default with minimal reasoning effort. This does not support agentic processing and is not recommended for long or fast pacing videos.
+- `gemini-3.5-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than 3 Flash Preview. Useful for quick video overviews and faster processing of long videos for time and budget constrained scenarios. Use of this model has reasoning effort to low.
+- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model.
 
 ## Workflow
 
