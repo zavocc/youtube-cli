@@ -83,9 +83,14 @@ youtube-watcher-cli --video dQw4w9WgXcQ classify whether this video is safe to s
 
 Quote the prompt if the shell or command runner requires it, but keep it as the final positional argument.
 
+
+## Model Outputs
+When making a request, it returns a structured JSON output (excluding if an error has occurred) that displays brief description of the video and optionally timestamps including an associated description of the timestamped passage. The timestamps are formatted as DD:HH:MM:SS with proper time conversion. The JSON output is deliberate and it's format cannot be changed.
+
 ## Pipelines and redirection
 
 Piping from other command outputs to Watcher CLI aren't supported yet, therefore avoid using piping commands with the Watcher CLI executable as a way to ingest context. However, Watcher CLI outputs from `stdout` and its errors from OS `stderr` can be piped to other commands or redirected to a file.
+
 
 ## Model capabilities
 
