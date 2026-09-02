@@ -22,7 +22,7 @@ func genResponseSchema() *genai.Schema {
 					Properties: map[string]*genai.Schema{
 						"timestamp": {
 							Type:        genai.TypeString,
-							Description: "Video timestamp in MM:SS or HH:MM:SS format.",
+							Description: "Video timestamp in DD:HH:MM:SS format.",
 						},
 						"passage": {
 							Type:        genai.TypeString,
