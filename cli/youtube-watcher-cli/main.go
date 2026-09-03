@@ -29,7 +29,8 @@ func showHelp() {
 		"Supported models:\n" +
 		" - gemini-3-flash-preview (with minimal thinking level)\n" +
 		" - gemini-3.5-flash-lite (with medium thinking level)\n" +
-		" - gemini-3.7-flash (with low thinking level)"
+		" - gemini-3.7-flash (with low thinking level)\n" +
+		" - gemini-3.8-flash (with high thinking level)"
 
 	fmt.Println(helpString)
 }

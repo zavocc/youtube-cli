@@ -63,7 +63,8 @@ If the user asks to summarize videos beyond an hour or working with videos such 
 
 - `gemini-3-flash-preview` - Best balance for speed, cost, and intelligence. Outperforming it's 2.5 Pro predecessor. It is the default with minimal reasoning effort. This does not support agentic processing and is not recommended for long or fast pacing videos.
 - `gemini-3.5-flash-lite` - Google's latest Flash-lite line of model that outperforms 2.5 Flash model and is cheaper than 3 Flash Preview. Useful for quick video overviews and faster processing of long videos for time and budget constrained scenarios. This model has reasoning effort to medium.
-- `gemini-3.7-flash` - Google's latest Flash model, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, with reasoning effort set to low. However, it is more expensive and has higher latency than other two models.
+- `gemini-3.7-flash` - Google's previous Flash model of Gemini 3.5 Flash iteration, matches or exceeding the quality of it's previous 3.1 Pro and Flash model, with reasoning effort set to low. However, it is more expensive and has higher latency than other two models.
+- `gemini-3.8-flash` - Google's latest Flash model, with better performance in agentic tasks, with better reasoning depth but would spend bit more time thinking than previous model, about the same price as 3.7 flash.
 
 ## Workflow
 

@@ -52,6 +52,15 @@ func ValidateModels(model string) (configTemplate, error) {
 			},
 			SupportsAgentic: true,
 		}, nil
+	case "gemini-3.8-flash":
+		return configTemplate{
+			ModelID: "gemini-3.8-flash",
+			ThinkingConfig: &genai.ThinkingConfig{
+				ThinkingLevel:   genai.ThinkingLevelLow,
+				IncludeThoughts: false,
+			},
+			SupportsAgentic: true,
+		}, nil
 	default:
 		return configTemplate{}, fmt.Errorf("invalid model %q", model)
 	}
@@ -76,6 +85,13 @@ func ValidateModelsOpenRouter(model string) (configTemplateOpenRouter, error) {
 	case "gemini-3.7-flash":
 		return configTemplateOpenRouter{
 			ModelID: "gemini-3.7-flash",
+			ThinkingConfig: &components.ChatRequestReasoning{
+				Effort: chatRequestEffort(components.ChatRequestEffortLow),
+			},
+		}, nil
+	case "gemini-3.8-flash":
+		return configTemplateOpenRouter{
+			ModelID: "gemini-3.8-flash",
 			ThinkingConfig: &components.ChatRequestReasoning{
 				Effort: chatRequestEffort(components.ChatRequestEffortLow),
 			},
