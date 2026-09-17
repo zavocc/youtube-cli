@@ -9,7 +9,7 @@ import (
 )
 
 // initializes gemini client
-func initGeminiClient(ctx context.Context) (*genai.Client, error) {
+func InitGeminiClient(ctx context.Context) (*genai.Client, error) {
 	// check if GOOGLE_GENAI_USE_ENTERPRISE is set to true
 	// If using enterprise, we check the existence of GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_CLOUD_PROJECT
 	_, useEnterprise := os.LookupEnv("GOOGLE_GENAI_USE_ENTERPRISE")

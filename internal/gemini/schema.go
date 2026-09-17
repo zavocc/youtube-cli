@@ -6,7 +6,7 @@ import (
 	"google.golang.org/genai"
 )
 
-func genResponseSchema() *genai.Schema {
+func GenResponseSchema() *genai.Schema {
 	return &genai.Schema{
 		Type: genai.TypeObject,
 		Properties: map[string]*genai.Schema{
@@ -44,7 +44,7 @@ func genResponseSchema() *genai.Schema {
 	}
 }
 
-func genResponseSchemaOpenRouter() components.ResponseFormat {
+func GenResponseSchemaOpenRouter() components.ResponseFormat {
 	description := "Answer the prompt grounded from the video."
 	strict := true
 

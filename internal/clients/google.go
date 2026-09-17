@@ -1,4 +1,4 @@
-package gemini
+package clients
 
 import (
 	"context"
@@ -6,18 +6,19 @@ import (
 	"strings"
 
 	"github.com/zavocc/youtube-watcher-cli/internal/config"
+	"github.com/zavocc/youtube-watcher-cli/internal/gemini"
 	"google.golang.org/genai"
 )
 
 func GApiClient(ctx context.Context, prompt string, url string, model string, resolution string, serviceTier string, agenticProcessing bool) (string, error) {
-	client, err := initGeminiClient(ctx)
+	client, err := gemini.InitGeminiClient(ctx)
 	if err != nil {
 		return "", fmt.Errorf("initialize the Gemini API client: %w", err)
 	}
 
 	// Check if it's either 11-character YouTube video ID or a full URL
 	var actualUrl string
-	if url, err := checkUrl(url); err != nil {
+	if url, err := gemini.CheckURL(url); err != nil {
 		return "", err
 	} else {
 		actualUrl = url
@@ -78,12 +79,12 @@ func GApiClient(ctx context.Context, prompt string, url string, model string, re
 		}, genai.RoleUser),
 	}
 
-	var resSchema = genResponseSchema()
+	var resSchema = gemini.GenResponseSchema()
 	result, err := client.Models.GenerateContent(
 		ctx, modelSelectedConfig.ModelID,
 		contents,
 		&genai.GenerateContentConfig{
-			SystemInstruction: genai.NewContentFromText(systemPrompt, genai.RoleUser),
+			SystemInstruction: genai.NewContentFromText(gemini.SystemPrompt, genai.RoleUser),
 			ThinkingConfig:    modelSelectedConfig.ThinkingConfig,
 			MediaResolution:   genai.MediaResolution(mediaResLevel),
 			ResponseMIMEType:  "application/json",

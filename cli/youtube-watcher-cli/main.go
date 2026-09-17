@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/zavocc/youtube-watcher-cli/internal/clients"
 	"github.com/zavocc/youtube-watcher-cli/internal/gemini"
 	"github.com/zavocc/youtube-watcher-cli/internal/shared"
 )
@@ -106,9 +107,9 @@ func main() {
 	ctx := context.Background()
 	var result string
 	if *isOpenRouter {
-		result, err = gemini.ORouterClient(ctx, prompt, *videoID, *selectedModel, *serviceTier)
+		result, err = clients.ORouterClient(ctx, prompt, *videoID, *selectedModel, *serviceTier)
 	} else {
-		result, err = gemini.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier, *isAgentic)
+		result, err = clients.GApiClient(ctx, prompt, *videoID, *selectedModel, *mediaRes, *serviceTier, *isAgentic)
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "An error has occurred - ", err)

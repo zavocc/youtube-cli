@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func checkUrl(url string) (string, error) {
+func CheckURL(url string) (string, error) {
 	// Check if it's either 11-character YouTube video ID or a full URL
 	var actualUrl string
 	if len(url) == 11 {

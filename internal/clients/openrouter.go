@@ -1,4 +1,4 @@
-package gemini
+package clients
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"github.com/OpenRouterTeam/go-sdk/models/components"
 	"github.com/OpenRouterTeam/go-sdk/optionalnullable"
 	"github.com/zavocc/youtube-watcher-cli/internal/config"
+	"github.com/zavocc/youtube-watcher-cli/internal/gemini"
 )
 
 func ORouterClient(ctx context.Context, prompt string, url string, model string, serviceTier string) (string, error) {
@@ -24,7 +25,7 @@ func ORouterClient(ctx context.Context, prompt string, url string, model string,
 
 	// Check if it's either 11-character YouTube video ID or a full URL
 	var actualUrl string
-	if url, err := checkUrl(url); err != nil {
+	if url, err := gemini.CheckURL(url); err != nil {
 		return "", err
 	} else {
 		actualUrl = url
@@ -53,7 +54,7 @@ func ORouterClient(ctx context.Context, prompt string, url string, model string,
 	contents := []components.ChatMessages{
 		components.CreateChatMessagesSystem(
 			components.ChatSystemMessage{
-				Content: components.CreateChatSystemMessageContentStr(systemPrompt),
+				Content: components.CreateChatSystemMessageContentStr(gemini.SystemPrompt),
 				Role:    components.ChatSystemMessageRoleSystem,
 			},
 		),
@@ -82,7 +83,7 @@ func ORouterClient(ctx context.Context, prompt string, url string, model string,
 	}
 
 	// Create the chat request
-	responseFormat := genResponseSchemaOpenRouter()
+	responseFormat := gemini.GenResponseSchemaOpenRouter()
 	temperatureNullable := 0.0
 	allowProviderFallbacks := false
 	onlyProviders := []components.ProviderPreferencesOnly{
