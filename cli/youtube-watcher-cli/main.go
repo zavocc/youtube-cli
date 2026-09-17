@@ -21,6 +21,7 @@ func showHelp() {
 		" --service-tier	  " + helpServiceTierString + "\n" +
 		" --openrouter        " + helpOpenRouterString + "\n" +
 		" --agentic-processing  " + helpUseAgenticProcessing + "\n" +
+		" --stats-for-nerds		" + helpStatsForNerdsString + "\n" +
 		" prompt              " + helpPromptString +
 		"\n\n" +
 		"Supplemental options:\n" +

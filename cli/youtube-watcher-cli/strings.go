@@ -9,6 +9,7 @@ const (
 	helpServiceTierString     = "Service tier. Possible values are 'flex' or 'priority'. Leave this for standard rates processing."
 	helpOpenRouterString      = "Use OpenRouter endpoint instead of Google, note you need to set an OpenRouter API key using same environment variable instead of Generative Client API."
 	helpUseAgenticProcessing  = "Use agentic processing of videos instead of ingesting each video frames"
+	helpStatsForNerdsString   = "Show stats for nerds at the end of the output, this includes token usage and model used."
 	helpPromptString          = "Prompt to ask questions about the video [REQUIRED]"
 	helpShowHelpString        = "Show help"
 	helpVersionString         = "Print version"
